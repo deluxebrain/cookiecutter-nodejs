@@ -1,0 +1,7 @@
+brew "asdf"
+brew "commitizen"
+brew "direnv"
+brew "git-extras"
+brew "graphviz"
+brew "pre-commit"
+brew "shellcheck"

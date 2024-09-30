@@ -1,0 +1,70 @@
+# Plugins
+# Prettier:
+# - eslint-plugin-prettier
+# Imports sorting:
+# - native sort-imports rules
+# - eslint-plugin-import
+# Esm import syntax:
+# - eslint-plugin-import
+# - eslint-import-resolver-typescript ( import .ts files )
+# Typescript support
+# - typescript-eslint
+env:
+  es2022: true
+  node: true
+settings:
+  import/resolver:
+    node: true
+    typescript: true
+extends:
+  - eslint:recommended
+  - plugin:prettier/recommended
+  - plugin:@typescript-eslint/recommended
+  - plugin:import/recommended
+  - plugin:import/typescript
+parser: "@typescript-eslint/parser"
+parserOptions:
+  ecmaVersion: 2022
+  sourceType: module
+  project: tsconfig.json
+plugins:
+  - "@typescript-eslint"
+  - prettier
+  - import
+rules:
+  import/no-unresolved: error
+  import/order:
+    - error
+    - groups:
+        - builtin
+        - external
+        - internal
+        - sibling
+        - parent
+        - index
+        - unknown
+      newlines-between: always
+      alphabetize:
+        order: asc
+        caseInsensitive: true
+  indent:
+    - error
+    - 4
+  linebreak-style:
+    - error
+    - unix
+  semi:
+    - error
+    - always
+  sort-imports:
+    - error
+    - ignoreCase: false
+      ignoreDeclarationSort: true
+      ignoreMemberSort: false
+      memberSyntaxSortOrder:
+        - none
+        - all
+        - multiple
+        - single
+      allowSeparatedGroups: true
+  "@typescript-eslint/no-floating-promises": error

@@ -1,0 +1,41 @@
+{
+  "name": "cookiecutter-nodejs",
+  "version": "0.0.0",
+  "main": "dist/app.js",
+  "type": "module",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "build": "npm run clean && tsc",
+    "circular": "madge --circular --extensions ts --dot src | dot -Tpng | imgcat",
+    "clean": "rimraf dist",
+    "format": "prettier --write '**/*.{ts,tsx}'",
+    "graph": "madge --extensions ts --dot src | dot Tpng | imgcat",
+    "lint": "eslint 'src/**/*.{ts,tsx}'",
+    "start": "nom run build && node ./dist/app.js",
+    "start:docker": "node app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@total-typescript/tsconfig": "^1.0.4",
+    "@types/eslint": "^9.6.1",
+    "@types/node": "^22.7.4",
+    "@typescript-eslint/eslint-plugin": "^8.7.0",
+    "@typescript-eslint/parser": "^8.7.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-typescript": "^3.6.3",
+    "eslint-plugin-import": "^2.30.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "madge": "^8.0.0",
+    "prettier": "^3.3.3",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.2"
+  }
+}
