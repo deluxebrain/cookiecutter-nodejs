@@ -1,5 +1,5 @@
 PROJECT := cookiecutter-nodejs
-VERSION := 0.2.0
+VERSION := 0.3.0
 ROOT_DIR := $(shell git rev-parse --show-toplevel)
 MAKEFILE_DIR := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
 
