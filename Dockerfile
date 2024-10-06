@@ -60,7 +60,8 @@ COPY --from=compile --chown=root:app --chmod=640 /app/dist ./
 RUN chmod -R ug+x /app
 
 ENV NODE_ENV=production
-USER ${APP_UID}
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 CMD ["node", "/app/app.js"]
+
+USER ${APP_UID}
