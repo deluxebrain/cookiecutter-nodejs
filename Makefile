@@ -3,41 +3,49 @@ VERSION := 0.1.0
 ROOT_DIR := $(shell git rev-parse --show-toplevel)
 MAKEFILE_DIR := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
 
-# run after cloning repo
-setup: --setup_git_hooks
-setup: --setup_install_packages
+.PHONY: reset
+reset: clean
+	@rm -f Brewfile.lock.json
+	@rm -rf node_modules
+	@rm -f .git/hooks/commit-msg
 
-# install pre-commit git hooks
---setup_git_hooks:
-	@git fetch origin --tags
-	@pre-commit install --hook-type commit-msg
-
---setup_install_packages:
-	@brew bundle --no-lock
-	@npm install
-
-start: build
-	@docker run $(PROJECT)
-
+.PHONY: clean
 clean:
 	@npm run clean
 
+.PHONY: install
+install: node_modules/.package-lock.json
+install: .git/hooks/commit-msg
+install: Brewfile.lock.json
+
+Brewfile.lock.json: Brewfile
+	@brew bundle
+
+node_modules/.package-lock.json: package.json
+	@npm install
+
+.git/hooks/commit-msg: .pre-commit-config.yaml
+	@pre-commit install --hook-type commit-msg
+
+.PHONY: format
 format:
 	@npm run format
 
-lint: lint-node lint-docker
+.PHONY: lint
+lint: --lint-node --lint-docker
 
-lint-node:
+--lint-node:
 	@npm run lint
 
-lint-docker:
+--lint-docker:
 	@docker run --rm -i hadolint/hadolint:latest < $(ROOT_DIR)/Dockerfile
 
-scan: scan-dockle scan-trivy
+.PHONY: scan
+scan: --scan-dockle --scan-trivy
 
 # scan docker image for best practices
-scan-dockle: DOCKLE_IGNORES = $(shell awk 'NF {print $1}' $(ROOT_DIR)/.dockleignore | paste -s -d, -)
-scan-dockle: build
+--scan-dockle: DOCKLE_IGNORES = $(shell awk 'NF {print $1}' $(ROOT_DIR)/.dockleignore | paste -s -d, -)
+--scan-dockle: build
 	@docker run --rm \
 		--env DOCKER_CONTENT_TRUST=1 \
 		--env DOCKLE_IGNORES=$(DOCKLE_IGNORES) \
@@ -49,7 +57,7 @@ scan-dockle: build
 			$(PROJECT):$(VERSION)
 
 # scan OS and app dependencies for vulnerabilities
-scan-trivy: build
+--scan-trivy: build
 	@docker run --rm \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-v $${XDG_CACHE_HOME:-$$HOME/.cache}:/root/.cache/ \
@@ -61,6 +69,7 @@ scan-trivy: build
 			--severity HIGH,CRITICAL \
 			$(PROJECT):$(VERSION)
 
+.PHONY: build
 build: DOCKER_CONTENT_TRUST=1
 build:
 	@docker build \
@@ -71,8 +80,17 @@ build:
 		--build-arg APP_REVISION="$(shell git rev-parse --short HEAD)" \
 		.
 
+.PHONY: start
+start: build
+	@docker run $(PROJECT)
+
+.PHONY: release
 release: lint scan version build
 	@git push --follow-tags
 
+.PHONY: version
 version:
 	@cz bump --yes
+
+.gitignore:
+	@git ignore-io homebrew node > .gitignore

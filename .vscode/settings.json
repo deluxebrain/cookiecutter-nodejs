@@ -6,6 +6,8 @@
   "editor.formatOnSave": true,
   "eslint.validate": ["javascript", "typescript"],
   "files.associations": {
+    ".envrc": "shellscript",
+    ".env": "shellscript",
     "*.example": "plaintext"
   },
   "files.exclude": {
@@ -21,5 +23,6 @@
     "**/coverage": true
   },
   "typescript.preferences.importModuleSpecifier": "relative",
-  "typescript.preferences.importModuleSpecifierEnding": "js"
+  "typescript.preferences.importModuleSpecifierEnding": "js",
+  "makefile.configureOnOpen": false
 }
