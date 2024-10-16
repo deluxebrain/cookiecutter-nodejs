@@ -1,2 +1,5 @@
 # Helm charts contain templating
 charts/**/*.yaml
+
+# Promptfoo prompts templates contain templating
+prompts/**/*.json

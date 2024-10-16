@@ -8,7 +8,9 @@
   "files.associations": {
     ".envrc": "shellscript",
     ".env": "shellscript",
-    "*.example": "plaintext"
+    "*.example": "plaintext",
+    "**/prompts/**/*.json": "plaintext",
+    "**/charts/**/*.yaml": "plaintext"
   },
   "files.exclude": {
     "Brewfile.lock.json": true,
@@ -26,5 +28,6 @@
   },
   "typescript.preferences.importModuleSpecifier": "relative",
   "typescript.preferences.importModuleSpecifierEnding": "js",
-  "makefile.configureOnOpen": false
+  "makefile.configureOnOpen": false,
+  "cSpell.words": ["shellcheck"]
 }
